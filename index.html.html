@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnaqMaps - Sistema de Mapas</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Folhas de estilo do Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+</head>
+<body>
+    <div class="container">
+        <!-- Botão menu mobile -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Overlay para fechar menu mobile -->
+        <div class="overlay" id="overlay"></div>
+        
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-map-marked-alt"></i>
+                <img src="logo.png" alt="AnaqMaps">
+            </div>
+            
+            <input type="text" class="title-input" id="map-title" placeholder="Título do Mapa...">
+            
+            <div class="search-box">
+                <input type="text" class="search-input" id="endereco" placeholder="Digite um endereço...">
+                <button class="tool-btn search" onclick="buscarEndereco()">
+                    <i class="fas fa-search"></i> <span class="btn-text">Buscar</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="tools-panel" id="toolsPanel">
+                <div class="tool-section">
+                    <h3><i class="fas fa-draw-polygon"></i> Ferramentas de Desenho</h3>
+                    <button class="tool-btn draw" onclick="ativarDesenhoPoligono()">
+                        <i class="fas fa-draw-polygon"></i> <span class="btn-text">Desenhar Polígono</span>
+                    </button>
+                    <button class="tool-btn label" onclick="toggleLabelOptions()">
+                        <i class="fas fa-tag"></i> <span class="btn-text">Adicionar Rótulo</span>
+                    </button>
+                    
+                    <div class="label-options" id="labelOptions" style="display: none;">
+                        <label for="nomePoligono">Nome do Polígono:</label>
+                        <input type="text" id="nomePoligono" placeholder="Digite o nome do polígono">
+                        
+                        <label for="poligonoSelecionado">Selecionar Polígono:</label>
+                        <select id="poligonoSelecionado">
+                            <option value="">-- Selecione um polígono --</option>
+                        </select>
+                        
+                        <button class="tool-btn label" onclick="adicionarRotulo()">
+                            <i class="fas fa-tag"></i> <span class="btn-text">Aplicar Rótulo</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tool-section">
+                    <h3><i class="fas fa-file-import"></i> Importação</h3>
+                    <button class="tool-btn import" onclick="importarKML()">
+                        <i class="fas fa-upload"></i> <span class="btn-text">Importar KML</span>
+                    </button>
+                    <button class="tool-btn import" onclick="carregarCamadasPredefinidas()">
+                        <i class="fas fa-layer-group"></i> <span class="btn-text">Carregar Camadas Predefinidas</span>
+                    </button>
+                    
+                    <div id="layer-controls" style="margin-top: 15px;">
+                        <!-- Controles de camadas serão adicionados aqui -->
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3><i class="fas fa-shapes"></i> Gerenciar Polígonos</h3>
+                    <div class="polygon-manager">
+                        <div class="polygon-manager-header" onclick="togglePolygonManager()">
+                            <div class="polygon-manager-title">
+                                <i class="fas fa-chevron-down"></i> <span class="btn-text">Lista de Polígonos</span>
+                                <span class="polygon-count" id="polygonCount">0</span>
+                            </div>
+                            <button class="polygon-manager-toggle">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </button>
+                        </div>
+                        <div class="polygon-manager-content collapsed" id="polygonManagerContent">
+                            <div id="polygon-controls">
+                                <!-- Controles de polígonos serão adicionados aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-section">
+                    <h3><i class="fas fa-print"></i> Impressão</h3>
+                    <button class="tool-btn print" onclick="togglePrintOptions()">
+                        <i class="fas fa-print"></i> <span class="btn-text">Imprimir Mapa</span>
+                    </button>
+                    
+                    <div class="print-options" id="printOptions" style="display: none;">
+                        <label for="tituloImpressao">Título do Mapa:</label>
+                        <input type="text" id="tituloImpressao" placeholder="Título para impressão">
+                        
+                        <label for="orientacao">Orientação:</label>
+                        <select id="orientacao">
+                            <option value="portrait">Retrato</option>
+                            <option value="landscape">Paisagem</option>
+                        </select>
+                        
+                        <button class="tool-btn print" onclick="prepararImpressao()">
+                            <i class="fas fa-print"></i> <span class="btn-text">Preparar para Impressão</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3><i class="fas fa-crop-alt"></i> Área de Impressão</h3>
+                    <button class="tool-btn btn-info" onclick="toggleMolduraImpressao()">
+                        <i class="fas fa-crop-alt"></i> <span class="btn-text">Mostrar Moldura A4</span>
+                    </button>
+                </div>
+
+                <div class="tool-section">
+                    <h3><i class="fas fa-arrows-alt"></i> Movimento</h3>
+                    <button id="btnToggleArraste" class="tool-btn btn-info" onclick="toggleArrastePoligonos()" data-arrastando="false">
+                        <i class="fas fa-arrows-alt"></i> <span class="btn-text">Ativar Movimento de Polígonos</span>
+                    </button>
+                    <button id="btnToggleRotulo" class="tool-btn btn-info" onclick="toggleArrasteRotulos()" data-arrastando="false">
+                        <i class="fas fa-text-width"></i> <span class="btn-text">Ativar Movimento de Rótulos</span>
+                    </button>
+                </div>               
+            </div>
+            
+            <div class="map-container">
+                <div id="map"></div>
+                <!-- Moldura da área de impressão -->
+                <div id="printFrame" class="print-frame" style="display: none;"></div>
+                <div id="printFrameLabel" class="print-frame-label" style="display: none;">ÁREA DE IMPRESSÃO A4</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bibliotecas necessárias -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-omnivore/0.3.4/leaflet-omnivore.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>

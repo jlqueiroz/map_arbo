@@ -1,0 +1,646 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* HEADER RESPONSIVO */
+.header {
+    background: transparent;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(1em, 4vw, 1.5em);
+    font-weight: bold;
+    min-width: 0;
+    flex: 0 1 auto;
+}
+
+.logo img {
+    height: clamp(40px, 8vw, 80px);
+    max-height: 80px;
+}
+
+.title-input {
+    background: white;
+    border: none;
+    color: black;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: clamp(1em, 3vw, 2.1em);
+    text-align: center;
+    flex: 1 1 300px;
+    min-width: 0;
+    max-width: 600px;
+    margin: 0 10px;
+}
+
+.title-input::placeholder {
+    font-size: clamp(0.8em, 2vw, 1em);
+    border: none;
+    border-radius: 5px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    border: none;
+    flex: 1 1 250px;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+.search-input {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    min-width: 150px;
+    font-size: 1em;
+    flex: 1;
+}
+
+/* MAIN CONTENT RESPONSIVO */
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        flex-direction: row;
+    }
+}
+
+/* TOOLS PANEL RESPONSIVO */
+.tools-panel {
+    width: 100%;
+    background: transparent;
+    padding: 15px;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    max-height: 40vh;
+    order: 2;
+}
+
+@media (min-width: 768px) {
+    .tools-panel {
+        width: 350px;
+        max-height: none;
+        order: 1;
+    }
+}
+
+@media (min-width: 1200px) {
+    .tools-panel {
+        width: 400px;
+    }
+}
+
+.tool-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tool-section h3 {
+    color: #2c3e50;
+    margin-bottom: 12px;
+    font-size: clamp(0.9em, 2vw, 1.1em);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tool-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: clamp(0.9em, 1.5vw, 1em);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tool-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.tool-btn.search {
+    background: #3498db;
+    color: white;
+}
+
+.tool-btn.draw {
+    background: #3498db;
+    color: white;
+}
+
+.tool-btn.label {
+    background: #3498db;
+    color: white;
+}
+
+.tool-btn.import {
+    background: #3498db;
+    color: white;
+}
+
+.tool-btn.print {
+    background: #3498db;
+    color: white;
+}
+
+.btn-info {
+    background: #3498db;
+    color: white;
+}
+
+.label-options, .print-options {
+    background: #3498db;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 8px;
+}
+
+.label-options label, .print-options label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #3498db;
+    font-size: clamp(0.8em, 1.5vw, 0.9em);
+}
+
+.label-options input, .label-options select,
+.print-options input, .print-options select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #3498db;
+    border-radius: 4px;
+    font-size: clamp(0.8em, 1.5vw, 1em);
+}
+
+/* MAP CONTAINER RESPONSIVO */
+.map-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    order: 1;
+    min-height: 60vh;
+}
+
+@media (min-width: 768px) {
+    .map-container {
+        order: 2;
+        min-height: auto;
+    }
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+/* Moldura da área de impressão responsiva */
+.print-frame {
+    position: absolute;
+    border: 2px dashed #ff0000;
+    background-color: rgba(255, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+}
+
+.print-frame.a4-portrait {
+    width: min(210mm, 90vw);
+    height: min(297mm, 127vw);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.print-frame.a4-landscape {
+    width: min(297mm, 90vw);
+    height: min(210mm, 64vw);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.print-frame-label {
+    position: absolute;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 2px 8px;
+    font-size: clamp(10px, 2vw, 12px);
+    font-weight: bold;
+    border-radius: 3px;
+    pointer-events: none;
+    z-index: 1001;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.print-frame-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1001;
+}
+
+.frame-toggle {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: clamp(0.8em, 1.5vw, 0.9em);
+    margin-bottom: 5px;
+}
+
+/* RÓTULOS RESPONSIVOS */
+.custom-label, .kml-label {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    cursor: move;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    user-select: none;
+    font-size: clamp(12px, 2vw, 14px);
+    width: clamp(120px, 25vw, 150px) !important;
+    height: clamp(30px, 6vw, 35px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+}
+
+.custom-label {
+    border: 2px solid #3498db;
+    color: #3498db;
+}
+
+.kml-label {
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.custom-label.transparent, .kml-label.transparent {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(52, 152, 219, 0.5) !important;
+    color: rgba(52, 152, 219, 0.5) !important;
+}
+
+.kml-label.transparent {
+    border-color: rgba(231, 76, 60, 0.5) !important;
+    color: rgba(231, 76, 60, 0.5) !important;
+}
+
+.custom-label.dragging, .kml-label.dragging {
+    background: #3498db;
+    color: white;
+    z-index: 1000;
+}
+
+.kml-label.dragging {
+    background: #e74c3c;
+}
+
+/* CONTROLES RESPONSIVOS */
+.layer-control, .polygon-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #3498db;
+    gap: 8px;
+}
+
+.layer-name, .polygon-name {
+    flex: 1;
+    font-size: clamp(0.8em, 1.5vw, 0.9em);
+    color: #2c3e50;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layer-toggle, .polygon-toggle, .layer-remove, .polygon-remove {
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: clamp(0.7em, 1.5vw, 0.8em);
+    white-space: nowrap;
+}
+
+.layer-toggle, .polygon-toggle {
+    background: #28a745;
+    color: white;
+}
+
+.layer-toggle.hidden, .polygon-toggle.hidden {
+    background: #dc3545;
+}
+
+.layer-remove, .polygon-remove {
+    background: #6c757d;
+    color: white;
+    margin-left: 0;
+}
+
+/* GERENCIADOR DE POLÍGONOS RESPONSIVO */
+.polygon-manager {
+    margin-top: 10px;
+}
+
+.polygon-manager-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.polygon-manager-title {
+    font-weight: bold;
+    font-size: clamp(0.8em, 1.5vw, 0.95em);
+    display: flex;
+    align-items: center;
+}
+
+.polygon-manager-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: clamp(0.8em, 1.5vw, 0.9em);
+    cursor: pointer;
+}
+
+.polygon-manager-content {
+    max-height: 200px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+.polygon-manager-content.collapsed {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.polygon-count {
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    margin-left: 8px;
+}
+
+/* MENU MOBILE */
+.mobile-menu-toggle {
+    display: none;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1002;
+}
+
+@media (max-width: 767px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .tools-panel {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        height: 100%;
+        max-height: none;
+        background: white;
+        z-index: 1001;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+    
+    .tools-panel.mobile-open {
+        left: 0;
+    }
+    
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+    }
+    
+    .overlay.active {
+        display: block;
+    }
+}
+
+/* MEDIA QUERIES ESPECÍFICAS */
+@media (max-width: 480px) {
+    .header {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .title-input {
+        flex: 1 1 100%;
+        order: 3;
+        margin: 5px 0 0 0;
+        max-width: none;
+    }
+    
+    .search-box {
+        flex: 1 1 100%;
+        order: 2;
+    }
+    
+    .tools-panel {
+        padding: 10px;
+    }
+    
+    .tool-btn {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 320px) {
+    .logo {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+    
+    .search-box {
+        flex-direction: column;
+    }
+    
+    .search-input {
+        min-width: auto;
+    }
+}
+
+/* ESTILOS DE IMPRESSÃO */
+@media print {
+    .tools-panel, .print-frame, .print-frame-controls, 
+    .mobile-menu-toggle, .overlay {
+        display: none !important;
+    }
+    
+    .header {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        flex-wrap: nowrap;
+    }
+    
+    .title-input {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+        flex: none;
+        width: auto;
+    }
+    
+    .search-box {
+        display: none !important;
+    }
+    
+    .logo {
+        display: none !important;
+    }
+
+    .map-container {
+        height: 100vh !important;
+    }
+    
+    #map {
+        height: 100% !important;
+    }
+    
+    .main-content {
+        flex-direction: row !important;
+    }
+}
+
+/* SCROLLBAR PERSONALIZADO */
+.tools-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tools-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.tools-panel::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.tools-panel::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* CONTROLES DO LEAFLET */
+.leaflet-control-zoom a {
+    background: #83868a !important;
+    color: white !important;
+    border: none !important;
+}
+
+.leaflet-control-scale-line {
+    background: #83868a !important;
+    color: white !important;
+    border: none !important;
+}
+
+.leaflet-popup-content button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 2px;
+    font-size: clamp(0.8em, 1.5vw, 0.9em);
+}
+
+.leaflet-popup-content button:hover {
+    background: #2980b9;
+}
+
+.leaflet-popup-content {
+    min-width: min(200px, 80vw);
+}
